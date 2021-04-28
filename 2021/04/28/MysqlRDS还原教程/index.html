@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      630 字
+      598 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      9
        分钟
     </span>
   
@@ -232,9 +232,9 @@
 <p>使用的是Linux Centos7环境，还原前请确保mysql环境卸载干净</p>
 <p>innobackupex解压命令需要安装qpress，使用如下命令安装：</p>
 <figure class="highlight css"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-tag">wget</span> &quot;<span class="hljs-selector-tag">http</span>://<span class="hljs-selector-tag">docs-aliyun</span><span class="hljs-selector-class">.cn-hangzhou</span><span class="hljs-selector-class">.oss</span><span class="hljs-selector-class">.aliyun-inc</span><span class="hljs-selector-class">.com</span>/<span class="hljs-selector-tag">assets</span>/<span class="hljs-selector-tag">attach</span>/183466/<span class="hljs-selector-tag">cn_zh</span>/1608011575185/<span class="hljs-selector-tag">qpress-11-linux-x64</span><span class="hljs-selector-class">.tar</span>&quot;<br><span class="hljs-selector-tag">tar</span> <span class="hljs-selector-tag">xvf</span> <span class="hljs-selector-tag">qpress-11-linux-x64</span><span class="hljs-selector-class">.tar</span><br><span class="hljs-selector-tag">chmod</span> 775 <span class="hljs-selector-tag">qpress</span><br><span class="hljs-selector-tag">cp</span> <span class="hljs-selector-tag">qpress</span> /<span class="hljs-selector-tag">usr</span>/<span class="hljs-selector-tag">bin</span><br></code></pre></div></td></tr></table></figure>
-<p>根据需要还原的Mysql镜像版本下载相应的工具，我需要还原的MySQL版本为5.7，所以下载Percona-XtraBackup-2.4。</p>
+<p>下载Percona-XtraBackup-2.4。</p>
 <figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute">wget</span> ftp://rpmfind.net/linux/atrpms/el<span class="hljs-number">6</span>-x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>/atrpms/stable/libev-<span class="hljs-number">4</span>.<span class="hljs-number">04</span>-<span class="hljs-number">2</span>.el<span class="hljs-number">6</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br><span class="hljs-attribute">rpm</span> -ivh libev-<span class="hljs-number">4</span>.<span class="hljs-number">04</span>-<span class="hljs-number">2</span>.el<span class="hljs-number">6</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br><span class="hljs-attribute">wget</span> https://downloads.percona.com/downloads/Percona-XtraBackup-<span class="hljs-number">2</span>.<span class="hljs-number">4</span>/Percona-XtraBackup-<span class="hljs-number">2</span>.<span class="hljs-number">4</span>.<span class="hljs-number">21</span>/binary/redhat/<span class="hljs-number">7</span>/x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>/percona-xtrabackup-<span class="hljs-number">24</span>-<span class="hljs-number">2</span>.<span class="hljs-number">4</span>.<span class="hljs-number">21</span>-<span class="hljs-number">1</span>.el<span class="hljs-number">7</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br><span class="hljs-attribute">yum</span> install -y wget net-tools rsync perl-DBD-MySQL perl-Digest-MD<span class="hljs-number">5</span><br><span class="hljs-attribute">rpm</span> -ivh percona-xtrabackup-<span class="hljs-number">24</span>-<span class="hljs-number">2</span>.<span class="hljs-number">4</span>.<span class="hljs-number">21</span>-<span class="hljs-number">1</span>.el<span class="hljs-number">7</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br></code></pre></div></td></tr></table></figure>
-<p>先对镜像进行解包，在对镜像解密：</p>
+<p>先对镜像进行解包，再对镜像解密：</p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-comment">## 解包</span><br>cat &lt;数据备份文件名&gt; | xbstream -x -v -C <span class="hljs-regexp">/home/my</span>sql/data<br><span class="hljs-comment">## 解密</span><br>innobackupex --decompress --remove-original <span class="hljs-regexp">/home/my</span>sql/data<br></code></pre></div></td></tr></table></figure>
 <p>查看解密后的文件：</p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">ls -l <span class="hljs-regexp">/home/my</span>sql/data<br></code></pre></div></td></tr></table></figure>
